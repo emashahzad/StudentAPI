@@ -1,40 +1,36 @@
 # Student Management API
 
-A RESTful Student Management API built with **Laravel 13**, featuring token-based authentication, role-based access control, and validation using Laravel Form Requests.
+This is a Laravel API project I built to practice API development, authentication, permissions, and validation.
+
+The project manages students, courses, and enrollments. I used Postman to test the API endpoints and check how authentication and permissions work.
 
 ## Features
 
-- **Authentication:** User registration and login using Laravel Sanctum.
-- **Token-based security:** Protected API endpoints require a valid Bearer token.
-- **Role-based permissions:** Admins can create, view, update, and delete records; regular users have view-only access.
-- **Student Management:** CRUD operations for students.
-- **Course Management:** CRUD operations for courses.
-- **Enrollment Management:** Manage student-course enrollments with relationships.
-- **Form Request Validation:** Separate validation classes for storing and updating students, courses, and enrollments.
-- **Password Reset:** Forgot-password and password-reset functionality.
-- **Welcome Email:** Email notification functionality.
-- **API Testing:** Endpoints tested using Postman.
+- User registration and login
+- Laravel Sanctum for token-based authentication
+- Admin and user roles using Spatie Laravel Permission
+- CRUD operations for students, courses, and enrollments
+- Form Request classes for validation
+- Forgot-password and reset-password functionality
+- Welcome email functionality
 
-## Technologies Used
+## Technologies
 
 - PHP
 - Laravel 13
 - MySQL
 - Laravel Sanctum
 - Spatie Laravel Permission
-- Laravel Form Requests
 - Postman
 
-## Installation
+## Installation and Setup
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/StudentAPI.git
+git clone https://github.com/emashahzad/StudentAPI.git
 cd StudentAPI
 ```
-
-Replace `YOUR_USERNAME` with your GitHub username.
 
 ### 2. Install dependencies
 
@@ -43,9 +39,9 @@ composer install
 npm install
 ```
 
-### 3. Configure environment
+### 3. Set up the environment
 
-Create your local environment file:
+Create a local `.env` file:
 
 ```bash
 copy .env.example .env
@@ -59,79 +55,68 @@ php artisan key:generate
 
 ### 4. Configure the database
 
-Create a MySQL database in phpMyAdmin, then update these values in your local `.env` file:
+Create a MySQL database in phpMyAdmin. Update the database settings in your `.env` file according to your local setup.
+
+Example:
 
 ```env
 DB_CONNECTION=mysql
 DB_HOST=127.0.0.1
 DB_PORT=3306
-DB_DATABASE=your_database_name
+DB_DATABASE=studentapi
 DB_USERNAME=root
 DB_PASSWORD=
 ```
 
-Use the database credentials configured on your own computer.
-
-### 5. Run migrations and seed roles
+### 5. Run migrations
 
 ```bash
 php artisan migrate
+```
+
+Seed the roles and permissions if your project uses the `RolePermissionSeeder`:
+
+```bash
 php artisan db:seed --class=RolePermissionSeeder
 ```
 
-Run the seeder command if it is not already executed automatically by your project setup.
-
-### 6. Start the Laravel server
+### 6. Start the server
 
 ```bash
 php artisan serve
 ```
 
-The API will normally be available at:
+The local server will usually run at:
 
 `http://127.0.0.1:8000`
 
-## Authentication
+## API Authentication
 
-Register or log in to obtain an authentication token. For protected endpoints, select **Authorization → Bearer Token** in Postman and enter the token returned by the login endpoint.
+I used Laravel Sanctum to protect the API endpoints.
 
-Example header:
+1. Register a user or log in using Postman.
+2. Copy the token returned after login.
+3. Open the Authorization tab in Postman.
+4. Select **Bearer Token** and paste the token.
+5. Send requests to protected endpoints.
 
-```http
-Authorization: Bearer YOUR_ACCESS_TOKEN
-Accept: application/json
-```
+Protected routes should reject requests that do not have a valid token.
 
-Requests without a valid token should not be able to access protected endpoints.
+## API Resources
 
-## Main API Endpoints
+The project includes three main resources:
 
-| Method | Endpoint | Purpose |
-|---|---|---|
-| POST | `/api/register` | Register a user |
-| POST | `/api/login` | Log in and obtain a token |
-| POST | `/api/logout` | Log out |
-| GET | `/api/students` | List students |
-| POST | `/api/students` | Create a student |
-| GET | `/api/students/{id}` | View a student |
-| PUT/PATCH | `/api/students/{id}` | Update a student |
-| DELETE | `/api/students/{id}` | Delete a student |
-| GET | `/api/courses` | List courses |
-| POST | `/api/courses` | Create a course |
-| GET | `/api/courses/{id}` | View a course |
-| PUT/PATCH | `/api/courses/{id}` | Update a course |
-| DELETE | `/api/courses/{id}` | Delete a course |
-| GET | `/api/enrollments` | List enrollments |
-| POST | `/api/enrollments` | Create an enrollment |
-| GET | `/api/enrollments/{id}` | View an enrollment |
-| PUT/PATCH | `/api/enrollments/{id}` | Update an enrollment |
-| DELETE | `/api/enrollments/{id}` | Delete an enrollment |
+- **Students:** Create, view, update, and delete student records.
+- **Courses:** Manage course records.
+- **Enrollments:** Manage the relationship between students and courses.
 
-Protected endpoints require a valid Bearer token. Admin-only operations require the appropriate permissions. Verify endpoint methods and access rules against `routes/api.php` in this project.
+The available endpoints and HTTP methods can be checked in `routes/api.php`.
 
-## Validation
+## Form Request Validation
 
-Dedicated Laravel Form Request classes handle validation:
+I moved validation rules into separate Form Request classes instead of keeping them directly in the controllers.
+
+The classes are:
 
 - `StoreStudentRequest`
 - `UpdateStudentRequest`
@@ -140,19 +125,18 @@ Dedicated Laravel Form Request classes handle validation:
 - `StoreEnrollmentRequest`
 - `UpdateEnrollmentRequest`
 
-This keeps validation logic separate from controller methods.
+This makes the validation code easier to organize and maintain.
 
 ## Testing
 
-The API endpoints were tested using Postman, including authentication, CRUD operations, token-based access, and role-based permissions.
+I used Postman to test registration, login, token-based authentication, and CRUD operations for students, courses, and enrollments. I also worked on role-based access using Spatie Laravel Permission.
 
-## Security Notes
+## What I Learned
 
-- Keep your `.env` file private.
-- Never commit real passwords, API keys, mail credentials, or access tokens.
-- Use `.env.example` to document environment variables without exposing secrets.
+While building this project, I practised working with REST APIs, database relationships, Sanctum authentication, role-based permissions, Form Request validation, and API testing with Postman.
 
 ## Author
 
 Ema Shahzad
 
+GitHub: https://github.com/emashahzad
