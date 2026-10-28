@@ -1,58 +1,158 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Student Management API
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A RESTful Student Management API built with **Laravel 13**, featuring token-based authentication, role-based access control, and validation using Laravel Form Requests.
 
-## About Laravel
+## Features
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Authentication:** User registration and login using Laravel Sanctum.
+- **Token-based security:** Protected API endpoints require a valid Bearer token.
+- **Role-based permissions:** Admins can create, view, update, and delete records; regular users have view-only access.
+- **Student Management:** CRUD operations for students.
+- **Course Management:** CRUD operations for courses.
+- **Enrollment Management:** Manage student-course enrollments with relationships.
+- **Form Request Validation:** Separate validation classes for storing and updating students, courses, and enrollments.
+- **Password Reset:** Forgot-password and password-reset functionality.
+- **Welcome Email:** Email notification functionality.
+- **API Testing:** Endpoints tested using Postman.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Technologies Used
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- PHP
+- Laravel 13
+- MySQL
+- Laravel Sanctum
+- Spatie Laravel Permission
+- Laravel Form Requests
+- Postman
 
-## Learning Laravel
+## Installation
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 1. Clone the repository
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+git clone https://github.com/YOUR_USERNAME/StudentAPI.git
+cd StudentAPI
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Replace `YOUR_USERNAME` with your GitHub username.
 
-## Contributing
+### 2. Install dependencies
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+npm install
+```
 
-## Code of Conduct
+### 3. Configure environment
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Create your local environment file:
 
-## Security Vulnerabilities
+```bash
+copy .env.example .env
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Generate the application key:
 
-## License
+```bash
+php artisan key:generate
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### 4. Configure the database
+
+Create a MySQL database in phpMyAdmin, then update these values in your local `.env` file:
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=your_database_name
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+Use the database credentials configured on your own computer.
+
+### 5. Run migrations and seed roles
+
+```bash
+php artisan migrate
+php artisan db:seed --class=RolePermissionSeeder
+```
+
+Run the seeder command if it is not already executed automatically by your project setup.
+
+### 6. Start the Laravel server
+
+```bash
+php artisan serve
+```
+
+The API will normally be available at:
+
+`http://127.0.0.1:8000`
+
+## Authentication
+
+Register or log in to obtain an authentication token. For protected endpoints, select **Authorization → Bearer Token** in Postman and enter the token returned by the login endpoint.
+
+Example header:
+
+```http
+Authorization: Bearer YOUR_ACCESS_TOKEN
+Accept: application/json
+```
+
+Requests without a valid token should not be able to access protected endpoints.
+
+## Main API Endpoints
+
+| Method | Endpoint | Purpose |
+|---|---|---|
+| POST | `/api/register` | Register a user |
+| POST | `/api/login` | Log in and obtain a token |
+| POST | `/api/logout` | Log out |
+| GET | `/api/students` | List students |
+| POST | `/api/students` | Create a student |
+| GET | `/api/students/{id}` | View a student |
+| PUT/PATCH | `/api/students/{id}` | Update a student |
+| DELETE | `/api/students/{id}` | Delete a student |
+| GET | `/api/courses` | List courses |
+| POST | `/api/courses` | Create a course |
+| GET | `/api/courses/{id}` | View a course |
+| PUT/PATCH | `/api/courses/{id}` | Update a course |
+| DELETE | `/api/courses/{id}` | Delete a course |
+| GET | `/api/enrollments` | List enrollments |
+| POST | `/api/enrollments` | Create an enrollment |
+| GET | `/api/enrollments/{id}` | View an enrollment |
+| PUT/PATCH | `/api/enrollments/{id}` | Update an enrollment |
+| DELETE | `/api/enrollments/{id}` | Delete an enrollment |
+
+Protected endpoints require a valid Bearer token. Admin-only operations require the appropriate permissions. Verify endpoint methods and access rules against `routes/api.php` in this project.
+
+## Validation
+
+Dedicated Laravel Form Request classes handle validation:
+
+- `StoreStudentRequest`
+- `UpdateStudentRequest`
+- `StoreCourseRequest`
+- `UpdateCourseRequest`
+- `StoreEnrollmentRequest`
+- `UpdateEnrollmentRequest`
+
+This keeps validation logic separate from controller methods.
+
+## Testing
+
+The API endpoints were tested using Postman, including authentication, CRUD operations, token-based access, and role-based permissions.
+
+## Security Notes
+
+- Keep your `.env` file private.
+- Never commit real passwords, API keys, mail credentials, or access tokens.
+- Use `.env.example` to document environment variables without exposing secrets.
+
+## Author
+
+Ema Shahzad
+
